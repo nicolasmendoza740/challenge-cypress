@@ -1,4 +1,4 @@
-import HomePage from '../pages/pageObjects/HomePage';
+import HomePage from '../pages/HomePage';
 
 describe.only('LoginPage POM Tests', () => {
   beforeEach(() => {
