@@ -1,0 +1,37 @@
+name: Ejecutar tests (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: 'Ruta del spec (opcional), p.ej. cypress/e2e/login.cy.js'
+        required: false
+        default: ''
+
+jobs:
+  run-cypress:
+    name: Ejecutar Cypress
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.spec }}" ]; then
+            echo "Ejecutando spec: ${{ github.event.inputs.spec }}"
+            npx cypress run --spec "${{ github.event.inputs.spec }}"
+          else
+            echo "Ejecutando todos los tests (npm test)"
+            npm test
+          fi
